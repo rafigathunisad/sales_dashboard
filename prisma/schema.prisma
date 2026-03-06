@@ -16,3 +16,24 @@ model user{
   id Int @id @default(autoincrement())
   name String
 }
+
+model Order {
+  id           Int         @id @default(autoincrement())
+  userId       Int
+  totalAmount  Float
+  createdAt    DateTime    @default(now())
+
+  user         User        @relation(fields: [userId], references: [id])
+  items        OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}

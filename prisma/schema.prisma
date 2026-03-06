@@ -5,26 +5,44 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
-model user{
-  id Int @id @default(autoincrement())
-  name String
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String
+  createdAt DateTime @default(now())
+
+  orders    Order[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  stock       Int
+  createdAt   DateTime @default(now())
+
+  orderItems  OrderItem[]
 }
 
 model Order {
-  id           Int         @id @default(autoincrement())
-  userId       Int
-  totalAmount  Float
-  createdAt    DateTime    @default(now())
+  id          Int        @id @default(autoincrement())
+  userId      Int
+  totalAmount Float
+  createdAt   DateTime   @default(now())
 
-  user         User        @relation(fields: [userId], references: [id])
-  items        OrderItem[]
+  user        User       @relation(fields: [userId], references: [id])
+  items       OrderItem[]
 }
 
 model OrderItem {

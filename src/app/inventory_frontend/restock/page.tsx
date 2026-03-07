@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-
+import { useRouter } from "next/navigation"
 export default function RestockPage(){
 
   const [categories,setCategories] = useState([])
@@ -10,20 +10,29 @@ export default function RestockPage(){
   const [categoryId,setCategoryId] = useState("")
   const [productId,setProductId] = useState("")
   const [quantity,setQuantity] = useState("")
+useEffect(()=>{
+
+  fetch("/api/categories")
+    .then(res=>res.json())
+    .then(data=>setCategories(data))
+
+},[])
+
+  const router = useRouter()
 
   useEffect(()=>{
 
-    fetch("/api/categories")
-      .then(res=>res.json())
-      .then(data=>setCategories(data))
+    fetch("/api/")
+      .then(res => res.json())
 
   },[])
 
 useEffect(()=>{
 
-  if(categoryId){
+  setProductId("")
+  setProducts([])
 
-    setProducts([])
+  if(categoryId){
 
     fetch(`/api/products?categoryId=${Number(categoryId)}`)
       .then(res=>res.json())
@@ -52,7 +61,8 @@ useEffect(()=>{
   }
 
   return(
-
+<>
+   
     <div className="min-h-screen bg-gray-100 p-10">
 
       <div className="max-w-xl mx-auto bg-white shadow-lg rounded-xl p-8">
@@ -129,13 +139,18 @@ useEffect(()=>{
           >
             Submit Restock
           </button>
-
+           <button
+            onClick={() => router.push("/inventory_frontend")}
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Inventory 
+          </button>
         </div>
 
       </div>
 
     </div>
-
+</>
   )
 
 }

@@ -1,26 +1,17 @@
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
 
-export async function GET() {
+export async function GET(req: Request) {
+
+  const { searchParams } = new URL(req.url)
+  const categoryId = searchParams.get("categoryId")
+
   const products = await prisma.product.findMany({
-    include: { category: true },
-  });
+    where: {
+      categoryId: Number(categoryId)
+    }
+  })
 
-  return NextResponse.json(products);
-}
+  return NextResponse.json(products)
 
-export async function POST(req: Request) {
-  const body = await req.json();
-
-  const product = await prisma.product.create({
-    data: {
-      name: body.name,
-      description: body.description,
-      price: body.price,
-      stock: body.stock,
-      categoryId: body.categoryId,
-    },
-  });
-
-  return NextResponse.json(product);
 }

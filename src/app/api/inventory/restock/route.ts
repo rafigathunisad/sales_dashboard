@@ -5,14 +5,26 @@ export async function POST(req: Request) {
 
   const { productId, quantity } = await req.json()
 
-  const updatedProduct = await prisma.product.update({
-    where: { id: productId },
-    data: {
-      stock: {
-        increment: quantity
+  const result = await prisma.$transaction(async (tx) => {
+
+    const updatedProduct = await tx.product.update({
+      where: { id: productId },
+      data: {
+        stock: {
+          increment: quantity
+        }
       }
-    }
+    })
+
+    await tx.restockHistory.create({
+      data: {
+        productId,
+        quantity
+      }
+    })
+
+    return updatedProduct
   })
 
-  return NextResponse.json(updatedProduct)
+  return NextResponse.json(result)
 }

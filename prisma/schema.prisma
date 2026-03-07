@@ -24,4 +24,15 @@ model Product {
   createdAt   DateTime @default(now())
 
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  restocks    RestockHistory[]
+}
+
+model RestockHistory {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

@@ -65,7 +65,7 @@ export default function InventoryPage() {
           </h1>
 
           <button
-            onClick={() => router.push("/inventory_frontend/restock")}
+            onClick={() => router.push("/inventory/restock")}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
             Restock Product

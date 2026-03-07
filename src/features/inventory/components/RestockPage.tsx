@@ -140,7 +140,7 @@ useEffect(()=>{
             Submit Restock
           </button>
            <button
-            onClick={() => router.push("/inventory_frontend")}
+            onClick={() => router.push("/inventory")}
             className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
             Inventory 

@@ -7,11 +7,30 @@ export async function GET(req: Request) {
   const categoryId = searchParams.get("categoryId")
 
   const products = await prisma.product.findMany({
-    where: {
-      categoryId: Number(categoryId)
+    where: categoryId
+      ? { categoryId: Number(categoryId) }
+      : {},
+    include: {
+      category: true
     }
   })
 
   return NextResponse.json(products)
+}
 
+export async function POST(req: Request) {
+
+  const { name, description, price, stock, categoryId } = await req.json()
+
+  const product = await prisma.product.create({
+    data: {
+      name,
+      description,
+      price,
+      stock,
+      categoryId
+    }
+  })
+
+  return NextResponse.json(product)
 }

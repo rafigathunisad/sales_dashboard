@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> Prod_Cat
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-<<<<<<< HEAD
+
 enum Role {
   ADMIN
   USER
@@ -25,7 +22,8 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-=======
+}
+
 model Category {
   id        Int       @id @default(autoincrement())
   name      String

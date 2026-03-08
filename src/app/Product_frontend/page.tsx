@@ -80,16 +80,57 @@ export default function ProductsPage() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Products</h1>
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Product Management</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
-        <input name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
-        <input name="price" placeholder="Price" value={form.price} onChange={handleChange} required />
-        <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} required />
+      {/* FORM */}
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-2 gap-4 bg-white p-6 shadow rounded-lg mb-8"
+      >
+        <input
+          name="name"
+          placeholder="Product Name"
+          value={form.name}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
 
-        <select name="categoryId" value={form.categoryId} onChange={handleChange} required>
+        <input
+          name="description"
+          placeholder="Description"
+          value={form.description}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
+
+        <input
+          name="price"
+          placeholder="Price"
+          value={form.price}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
+
+        <input
+          name="stock"
+          placeholder="Stock"
+          value={form.stock}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
+
+        <select
+          name="categoryId"
+          value={form.categoryId}
+          onChange={handleChange}
+          className="border p-2 rounded col-span-2"
+          required
+        >
           <option value="">Select Category</option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
@@ -98,37 +139,50 @@ export default function ProductsPage() {
           ))}
         </select>
 
-        <button type="submit">Add Product</button>
+        <button
+          type="submit"
+          className="bg-green-600 text-white py-2 rounded hover:bg-green-700 col-span-2"
+        >
+          Add Product
+        </button>
       </form>
 
-      <table border={1} cellPadding={10} style={{ marginTop: "20px" }}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Category</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((prod) => (
-            <tr key={prod.id}>
-              <td>{prod.id}</td>
-              <td>{prod.name}</td>
-              <td>{prod.price}</td>
-              <td>{prod.stock}</td>
-              <td>{prod.category?.name}</td>
-              <td>
-                <button onClick={() => handleDelete(prod.id)}>
-                  Delete
-                </button>
-              </td>
+      {/* TABLE */}
+      <div className="bg-white shadow rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 text-left">ID</th>
+              <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left">Price</th>
+              <th className="p-3 text-left">Stock</th>
+              <th className="p-3 text-left">Category</th>
+              <th className="p-3 text-left">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {products.map((prod) => (
+              <tr key={prod.id} className="border-t">
+                <td className="p-3">{prod.id}</td>
+                <td className="p-3">{prod.name}</td>
+                <td className="p-3">${prod.price}</td>
+                <td className="p-3">{prod.stock}</td>
+                <td className="p-3">{prod.category?.name}</td>
+
+                <td className="p-3">
+                  <button
+                    onClick={() => handleDelete(prod.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

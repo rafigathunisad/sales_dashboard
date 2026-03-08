@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 enum Role {
   ADMIN
   USER
@@ -21,22 +22,32 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  products  Product[]
 }
 
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String
   price       Float
   stock       Int
+  categoryId  Int
   createdAt   DateTime @default(now())
 
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   orderItems  OrderItem[]
 }
 
 model Order {
   id           Int         @id @default(autoincrement())
-  userId       Int
+  userId       String
   totalAmount  Float
   createdAt    DateTime    @default(now())
 
@@ -51,6 +62,6 @@ model OrderItem {
   quantity  Int
   price     Float
 
-  order     Order   @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id])
 }

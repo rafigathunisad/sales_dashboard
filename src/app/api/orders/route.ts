@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
-import {prisma} from "@/lib/prisma"
+import { createOrder } from "@/features/orders/services/orderService"
+import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request) {
 
@@ -16,42 +17,20 @@ export async function POST(req: Request) {
       )
     }
 
-    let total = 0
-
-    for (const item of items) {
-      total += item.price * item.quantity
-    }
-
-    const order = await prisma.order.create({
-      data: {
-        userId,
-        totalAmount: total,
-        items: {
-          create: items.map((item: any) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: item.price
-          }))
-        }
-      },
-      include: {
-        items: true
-      }
-    })
+    const order = await createOrder(userId, items)
 
     return NextResponse.json(order)
 
-  } catch (error) {
-
-    console.error(error)
+  } catch (error: any) {
 
     return NextResponse.json(
-      { error: "Order creation failed" },
+      { error: error.message },
       { status: 500 }
     )
   }
 
 }
+
 
 export async function GET() {
 
@@ -60,6 +39,9 @@ export async function GET() {
     const orders = await prisma.order.findMany({
       include: {
         items: true
+      },
+      orderBy: {
+        createdAt: "desc"
       }
     })
 

@@ -11,6 +11,7 @@ const adminPaths = [
     "/Product_frontend",
     "/categories_frontend",
     "/inventory",
+    "/reports",
 ]
 
 // routes only USER can access

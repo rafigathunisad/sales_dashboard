@@ -1,10 +1,9 @@
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -35,32 +34,31 @@ model Product {
   categoryId  Int
   createdAt   DateTime @default(now())
 
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  orderItems  OrderItem[]
-  restocks    RestockHistory[]
+  category   Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+  restocks   RestockHistory[]
 }
 
 model Order {
-  id           Int         @id @default(autoincrement())
-  userId       String
-  totalAmount  Float
-  createdAt    DateTime    @default(now())
+  id          Int      @id @default(autoincrement())
+  userId      String
+  totalAmount Float
+  createdAt   DateTime @default(now())
 
-  user         User        @relation(fields: [userId], references: [id])
-  items        OrderItem[]
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
 }
 
 model OrderItem {
-  id        Int     @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   orderId   Int
   productId Int
   quantity  Int
   price     Float
 
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
 }
-
 
 model RestockHistory {
   id        Int      @id @default(autoincrement())
@@ -68,5 +66,5 @@ model RestockHistory {
   quantity  Int
   createdAt DateTime @default(now())
 
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

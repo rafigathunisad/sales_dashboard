@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { AdminNavBar } from "@/components/DashboardNavBar"
 
 export default function InventoryPage() {
 
@@ -78,19 +79,21 @@ export default function InventoryPage() {
 
   return (
 
-    <div className="h-screen bg-[#5f745f] p-8 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
 
-      <div className="w-full max-w-7xl bg-[#e7efe7] shadow-md rounded-xl border border-[#c9d6c9] p-8">
+      <AdminNavBar />
+
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6">
 
         <div className="flex justify-between items-center mb-6">
 
-          <h1 className="text-2xl font-bold text-[#1f2a1f]">
+          <h1 className="text-2xl font-bold">
             Inventory Management
           </h1>
 
           <button
             onClick={() => router.push("/inventory/restock")}
-            className="bg-[#2f3e2f] text-[#e7efe7] px-4 py-2 rounded-md hover:bg-[#1f2a1f] transition"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
           >
             Restock Product
           </button>
@@ -101,15 +104,15 @@ export default function InventoryPage() {
 
         {lowStockProducts.length > 0 && (
 
-          <div className="mb-4 bg-[#f3c6c6] border border-[#e3a8a8] rounded-lg px-4 py-3 flex justify-between items-center">
+          <div className="mb-4 bg-red-50 border border-red-200 rounded-lg px-4 py-3 flex justify-between items-center">
 
-            <span className="text-[#7a1f1f] font-semibold">
+            <span className="text-red-700 font-semibold text-sm">
               {lowStockProducts.length} Low Stock Products
             </span>
 
             <button
               onClick={()=>setShowLowStockModal(true)}
-              className="bg-[#2f3e2f] text-[#e7efe7] px-3 py-1 rounded-md text-sm hover:bg-[#1f2a1f]"
+              className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition-colors"
             >
               View Details
             </button>
@@ -120,12 +123,12 @@ export default function InventoryPage() {
 
         {/* Filters */}
 
-        <div className="bg-[#d8e4d8] border border-[#c4d3c4] rounded-lg p-4 mb-4">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4 shadow-sm">
 
           <div className="flex flex-wrap gap-4 items-end">
 
             <div className="flex flex-col">
-              <label className="text-sm font-semibold text-[#2f3e2f] mb-1">
+              <label className="text-xs font-semibold text-gray-500 uppercase mb-1">
                 Search Product
               </label>
 
@@ -134,19 +137,19 @@ export default function InventoryPage() {
                 placeholder="Search by name..."
                 value={search}
                 onChange={(e)=>setSearch(e.target.value)}
-                className="border border-[#9fb29f] text-[#1f2a1f] rounded-md px-3 py-2 w-64 bg-[#e7efe7]"
+                className="border border-gray-300 rounded-md px-3 py-2 w-64 focus:outline-none focus:border-blue-500"
               />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-semibold text-[#2f3e2f] mb-1">
+              <label className="text-xs font-semibold text-gray-500 uppercase mb-1">
                 Category
               </label>
 
               <select
                 value={categoryFilter}
                 onChange={(e)=>setCategoryFilter(e.target.value)}
-                className="border border-[#9fb29f] text-[#1f2a1f] rounded-md px-3 py-2 w-44 bg-[#e7efe7]"
+                className="border border-gray-300 rounded-md px-3 py-2 w-44 focus:outline-none focus:border-blue-500"
               >
                 <option value="">All Categories</option>
                 {categories.map((cat:any)=>(
@@ -156,7 +159,7 @@ export default function InventoryPage() {
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-semibold text-[#2f3e2f] mb-1">
+              <label className="text-xs font-semibold text-gray-500 uppercase mb-1">
                 Min Price
               </label>
 
@@ -164,12 +167,12 @@ export default function InventoryPage() {
                 type="number"
                 value={minPrice}
                 onChange={(e)=>setMinPrice(e.target.value)}
-                className="border border-[#9fb29f] text-[#1f2a1f] rounded-md px-3 py-2 w-32 bg-[#e7efe7]"
+                className="border border-gray-300 rounded-md px-3 py-2 w-32 focus:outline-none focus:border-blue-500"
               />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-sm font-semibold text-[#2f3e2f] mb-1">
+              <label className="text-xs font-semibold text-gray-500 uppercase mb-1">
                 Max Price
               </label>
 
@@ -177,7 +180,7 @@ export default function InventoryPage() {
                 type="number"
                 value={maxPrice}
                 onChange={(e)=>setMaxPrice(e.target.value)}
-                className="border border-[#9fb29f] text-[#1f2a1f] rounded-md px-3 py-2 w-32 bg-[#e7efe7]"
+                className="border border-gray-300 rounded-md px-3 py-2 w-32 focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -187,13 +190,13 @@ export default function InventoryPage() {
 
         {/* Table */}
 
-        <div className="border border-[#c4d3c4] rounded-lg overflow-hidden shadow-sm">
+        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
 
-          <div className="max-h-64 overflow-y-auto">
+          <div className="max-h-[28rem] overflow-y-auto">
 
             <table className="w-full border-collapse">
 
-              <thead className="bg-[#b9cbb9] text-[#1f2a1f] text-sm uppercase tracking-wide sticky top-0">
+              <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase sticky top-0">
 
                 <tr>
 
@@ -225,31 +228,31 @@ export default function InventoryPage() {
 
               </thead>
 
-              <tbody>
+              <tbody className="divide-y divide-gray-100">
 
                 {paginatedProducts.map((p:any)=>(
 
                   <tr
                     key={p.id}
-                    className="border-b border-[#c4d3c4] hover:bg-[#d8e4d8] text-[#1f2a1f]"
+                    className="hover:bg-gray-50 transition-colors"
                   >
 
-                    <td className="px-4 py-3 text-center">{p.id}</td>
-                    <td className="px-4 py-3 text-center">{p.name}</td>
-                    <td className="px-4 py-3 text-center">{p.category.name}</td>
-                    <td className="px-4 py-3 text-center">${p.price}</td>
-                    <td className="px-4 py-3 text-center">{p.stock}</td>
+                    <td className="px-4 py-3 text-center text-sm">{p.id}</td>
+                    <td className="px-4 py-3 text-center text-sm font-medium">{p.name}</td>
+                    <td className="px-4 py-3 text-center text-sm">{p.category.name}</td>
+                    <td className="px-4 py-3 text-center text-sm">${p.price}</td>
+                    <td className="px-4 py-3 text-center text-sm">{p.stock}</td>
 
                     <td className="px-4 py-3 text-center">
 
                       {p.stock < 10
                         ? (
-                          <span className="bg-[#f3c6c6] text-[#7a1f1f] px-3 py-1 rounded-full text-xs font-semibold">
+                          <span className="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
                             Low Stock
                           </span>
                         )
                         : (
-                          <span className="bg-[#cfe8cf] text-[#1e5f1e] px-3 py-1 rounded-full text-xs font-semibold">
+                          <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
                             In Stock
                           </span>
                         )
@@ -271,49 +274,49 @@ export default function InventoryPage() {
 
         {/* Pagination */}
 
-        <div className="flex justify-center items-center gap-3 mt-3">
+        <div className="flex justify-center items-center gap-3 mt-4">
 
           <button
             onClick={()=>setPage(page-1)}
             disabled={page===1}
-            className="bg-[#2f3e2f] text-[#e7efe7] px-3 py-1 rounded disabled:opacity-50"
+            className="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50 transition-colors"
           >
             Prev
           </button>
 
-          <span className="text-[#1f2a1f] font-semibold">
+          <span className="text-sm font-medium text-gray-600">
             Page {page}
           </span>
 
           <button
             onClick={()=>setPage(page+1)}
             disabled={page * rowsPerPage >= filteredProducts.length}
-            className="bg-[#2f3e2f] text-[#e7efe7] px-3 py-1 rounded disabled:opacity-50"
+            className="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50 transition-colors"
           >
             Next
           </button>
 
         </div>
 
-      </div>
+      </main>
 
       {/* Modal */}
 
       {showLowStockModal && (
 
-        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-[#e7efe7] border border-[#c4d3c4] w-[600px] rounded-xl shadow-xl p-6">
+          <div className="bg-white border border-gray-200 w-[600px] rounded-xl shadow-lg p-6">
 
             <div className="flex justify-between mb-4">
 
-              <h2 className="text-lg font-semibold text-[#1f2a1f]">
+              <h2 className="text-lg font-semibold">
                 Low Stock Products
               </h2>
 
               <button
                 onClick={()=>setShowLowStockModal(false)}
-                className="text-[#1f2a1f] font-bold"
+                className="text-gray-500 hover:text-gray-900 font-bold"
               >
                 ✕
               </button>
@@ -322,29 +325,31 @@ export default function InventoryPage() {
 
             <table className="w-full text-sm">
 
-              <thead className="bg-[#b9cbb9] text-[#1f2a1f]">
+              <thead className="bg-gray-50 border-b border-gray-200">
 
                 <tr>
-                  <th className="py-2 text-center">Product</th>
-                  <th className="py-2 text-center">Category</th>
-                  <th className="py-2 text-center">Stock</th>
+                  <th className="py-2 px-3 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
+                  <th className="py-2 px-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
+                  <th className="py-2 px-3 text-left text-xs font-semibold text-gray-500 uppercase">Stock</th>
                 </tr>
 
               </thead>
 
-              <tbody>
+              <tbody className="divide-y divide-gray-100">
 
                 {lowStockProducts.map((p:any)=>(
 
                   <tr
                     key={p.id}
-                    className="border-b border-[#c4d3c4] hover:bg-[#d8e4d8]"
+                    className="hover:bg-gray-50"
                   >
 
-                    <td className="py-2 text-center text-[#1f2a1f] font-medium">{p.name}</td>
-                    <td className="py-2 text-center text-[#1f2a1f]">{p.category.name}</td>
-                    <td className="py-2 text-center font-semibold text-[#7a1f1f] bg-[#f3c6c6] rounded-md">
-                      {p.stock}
+                    <td className="py-2 px-3 font-medium">{p.name}</td>
+                    <td className="py-2 px-3">{p.category.name}</td>
+                    <td className="py-2 px-3">
+                      <span className="bg-red-50 text-red-700 px-2 py-0.5 rounded text-xs font-semibold">
+                        {p.stock}
+                      </span>
                     </td>
 
                   </tr>

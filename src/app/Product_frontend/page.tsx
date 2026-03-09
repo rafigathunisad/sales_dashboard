@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AdminNavBar } from "@/components/DashboardNavBar";
 
 interface Category {
   id: number;
@@ -80,109 +81,113 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Product Management</h1>
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
+      <AdminNavBar />
 
-      {/* FORM */}
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-2 gap-4 bg-white p-6 shadow rounded-lg mb-8"
-      >
-        <input
-          name="name"
-          placeholder="Product Name"
-          value={form.name}
-          onChange={handleChange}
-          className="border p-2 rounded"
-          required
-        />
+      <main className="flex-1 max-w-6xl w-full mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Product Management</h1>
 
-        <input
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          className="border p-2 rounded"
-          required
-        />
-
-        <input
-          name="price"
-          placeholder="Price"
-          value={form.price}
-          onChange={handleChange}
-          className="border p-2 rounded"
-          required
-        />
-
-        <input
-          name="stock"
-          placeholder="Stock"
-          value={form.stock}
-          onChange={handleChange}
-          className="border p-2 rounded"
-          required
-        />
-
-        <select
-          name="categoryId"
-          value={form.categoryId}
-          onChange={handleChange}
-          className="border p-2 rounded col-span-2"
-          required
+        {/* FORM */}
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-2 gap-4 bg-white p-6 shadow-sm rounded-lg border border-gray-200 mb-8"
         >
-          <option value="">Select Category</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
+          <input
+            name="name"
+            placeholder="Product Name"
+            value={form.name}
+            onChange={handleChange}
+            className="border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
+            required
+          />
 
-        <button
-          type="submit"
-          className="bg-green-600 text-white py-2 rounded hover:bg-green-700 col-span-2"
-        >
-          Add Product
-        </button>
-      </form>
+          <input
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            className="border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
+            required
+          />
 
-      {/* TABLE */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-3 text-left">ID</th>
-              <th className="p-3 text-left">Name</th>
-              <th className="p-3 text-left">Price</th>
-              <th className="p-3 text-left">Stock</th>
-              <th className="p-3 text-left">Category</th>
-              <th className="p-3 text-left">Action</th>
-            </tr>
-          </thead>
+          <input
+            name="price"
+            placeholder="Price"
+            value={form.price}
+            onChange={handleChange}
+            className="border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
+            required
+          />
 
-          <tbody>
-            {products.map((prod) => (
-              <tr key={prod.id} className="border-t">
-                <td className="p-3">{prod.id}</td>
-                <td className="p-3">{prod.name}</td>
-                <td className="p-3">${prod.price}</td>
-                <td className="p-3">{prod.stock}</td>
-                <td className="p-3">{prod.category?.name}</td>
+          <input
+            name="stock"
+            placeholder="Stock"
+            value={form.stock}
+            onChange={handleChange}
+            className="border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
+            required
+          />
 
-                <td className="p-3">
-                  <button
-                    onClick={() => handleDelete(prod.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+          <select
+            name="categoryId"
+            value={form.categoryId}
+            onChange={handleChange}
+            className="border border-gray-300 p-2 rounded col-span-2 focus:outline-none focus:border-blue-500"
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </select>
+
+          <button
+            type="submit"
+            className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 col-span-2 transition-colors"
+          >
+            Add Product
+          </button>
+        </form>
+
+        {/* TABLE */}
+        <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="p-3 text-left text-xs font-semibold text-gray-500 uppercase">ID</th>
+                <th className="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
+                <th className="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Price</th>
+                <th className="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Stock</th>
+                <th className="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
+                <th className="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Action</th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-gray-100">
+              {products.map((prod) => (
+                <tr key={prod.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="p-3 text-sm">{prod.id}</td>
+                  <td className="p-3 text-sm font-medium">{prod.name}</td>
+                  <td className="p-3 text-sm">${prod.price}</td>
+                  <td className="p-3 text-sm">{prod.stock}</td>
+                  <td className="p-3 text-sm">{prod.category?.name}</td>
+
+                  <td className="p-3">
+                    <button
+                      onClick={() => handleDelete(prod.id)}
+                      className="text-red-500 hover:text-red-700 text-sm font-medium"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
   );
 }

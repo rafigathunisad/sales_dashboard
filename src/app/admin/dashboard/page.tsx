@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { signOut } from "next-auth/react"
 import { createUser, getUsers, deleteUser } from "./actions"
 import AdminPage from "@/features/dashboard/admin_page"
-import DashboardNavBar from "@/components/DashboardNavBar"
+import { AdminNavBar } from "@/components/DashboardNavBar"
 
 export default function AdminDashboard() {
     const [modalOpen, setModalOpen] = useState(false)
@@ -55,28 +55,19 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50/50 flex flex-col font-sans text-gray-900">
-            {/* Navigation Bar */}
-            <DashboardNavBar />
+        <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
+            <AdminNavBar />
 
             {/* Top Action Bar */}
             <div className="w-full bg-white border-b border-gray-100 px-6 lg:px-8 py-3">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <span className="text-sm text-green-600 font-semibold">● Online</span>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => setModalOpen(true)}
-                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm shadow-blue-500/20 transition-colors"
-                        >
-                            + Create User
-                        </button>
-                        <button
-                            onClick={() => signOut({ callbackUrl: "/admin/login" })}
-                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
-                        >
-                            Logout
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => setModalOpen(true)}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors"
+                    >
+                        + Create User
+                    </button>
                 </div>
             </div>
 

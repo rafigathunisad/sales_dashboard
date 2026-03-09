@@ -104,7 +104,7 @@ export default function InventoryPage() {
           <div className="mb-4 bg-[#f3c6c6] border border-[#e3a8a8] rounded-lg px-4 py-3 flex justify-between items-center">
 
             <span className="text-[#7a1f1f] font-semibold">
-              ⚠ {lowStockProducts.length} Low Stock Products
+              {lowStockProducts.length} Low Stock Products
             </span>
 
             <button

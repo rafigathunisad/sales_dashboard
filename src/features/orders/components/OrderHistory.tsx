@@ -6,6 +6,7 @@ export default function OrderHistory({ refresh }: { refresh: number }) {
 
 const [orders, setOrders] = useState<any[]>([])
 const [loading, setLoading] = useState(true)
+const [openOrder, setOpenOrder] = useState<number | null>(null)
 
 useEffect(() => {
 fetchOrders()
@@ -21,6 +22,14 @@ setOrders(data)
 setLoading(false)
 
 
+}
+
+function toggleOrder(id: number) {
+if (openOrder === id) {
+setOpenOrder(null)
+} else {
+setOpenOrder(id)
+}
 }
 
 if (loading) {
@@ -44,19 +53,58 @@ return (
 
       {orders.map(order => (
 
-        <div key={order.id} className="border p-3 rounded">
+        <div
+          key={order.id}
+          className="border rounded p-3"
+        >
 
-          <p className="font-semibold">
-            Order #{order.id}
-          </p>
+          <div
+            className="flex justify-between cursor-pointer"
+            onClick={() => toggleOrder(order.id)}
+          >
 
-          <p className="text-sm text-gray-600">
-            Total: ₹{order.totalAmount}
-          </p>
+            <div>
 
-          <p className="text-sm text-gray-500">
-            {new Date(order.createdAt).toLocaleString()}
-          </p>
+              <p className="font-semibold">
+                Order #{order.id}
+              </p>
+
+              <p className="text-sm text-gray-600">
+                Total: ₹{order.totalAmount}
+              </p>
+
+            </div>
+
+            <span className="text-sm text-gray-500">
+              {openOrder === order.id ? "▲" : "▼"}
+            </span>
+
+          </div>
+
+          {openOrder === order.id && (
+
+            <div className="mt-3 border-t pt-2">
+
+              {order.items.map((item: any, index: number) => (
+
+                <div
+                  key={index}
+                  className="flex justify-between text-sm"
+                >
+
+                  <span>Product #{item.productId}</span>
+
+                  <span>
+                    Qty: {item.quantity} | ₹{item.price}
+                  </span>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          )}
 
         </div>
 
@@ -67,6 +115,7 @@ return (
   )}
 
 </div>
+
 
 )
 }

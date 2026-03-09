@@ -25,8 +25,6 @@ function matchesAny(pathname: string, paths: string[]) {
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl
 
-    console.log("middleware hit:", pathname)
-
     // let public pages and static assets through
     if (
         matchesAny(pathname, publicPaths) ||
@@ -51,7 +49,11 @@ export async function middleware(req: NextRequest) {
     // ---------- API routes ----------
     if (pathname.startsWith("/api/")) {
         // any authenticated user can read
-        if (req.method === "GET") return NextResponse.next()
+        if (req.method === "GET") {
+            const res = NextResponse.next()
+            res.headers.set("Cache-Control", "no-store")
+            return res
+        }
 
         // only admin can write (POST/PUT/DELETE)
         if (role !== "ADMIN") {
@@ -60,7 +62,10 @@ export async function middleware(req: NextRequest) {
                 { status: 403 }
             )
         }
-        return NextResponse.next()
+
+        const res = NextResponse.next()
+        res.headers.set("Cache-Control", "no-store")
+        return res
     }
 
     // ---------- Page routes ----------
@@ -70,7 +75,9 @@ export async function middleware(req: NextRequest) {
             url.pathname = "/"
             return NextResponse.redirect(url)
         }
-        return NextResponse.next()
+        const res = NextResponse.next()
+        res.headers.set("Cache-Control", "no-store")
+        return res
     }
 
     if (matchesAny(pathname, userPaths)) {
@@ -79,11 +86,15 @@ export async function middleware(req: NextRequest) {
             url.pathname = "/"
             return NextResponse.redirect(url)
         }
-        return NextResponse.next()
+        const res = NextResponse.next()
+        res.headers.set("Cache-Control", "no-store")
+        return res
     }
 
     // any other route: authenticated users only (checked above)
-    return NextResponse.next()
+    const res = NextResponse.next()
+    res.headers.set("Cache-Control", "no-store")
+    return res
 }
 
 export const config = {

@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { signOut } from "next-auth/react"
 import { createUser, getUsers, deleteUser } from "./actions"
 import AdminPage from "@/features/dashboard/admin_page"
 import DashboardNavBar from "@/components/DashboardNavBar"
@@ -69,12 +70,12 @@ export default function AdminDashboard() {
                         >
                             + Create User
                         </button>
-                        <Link
-                            href="/admin/login"
+                        <button
+                            onClick={() => signOut({ callbackUrl: "/admin/login" })}
                             className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
                         >
                             Logout
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </div>

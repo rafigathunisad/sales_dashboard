@@ -14,7 +14,7 @@ const adminPaths = [
 ]
 
 // routes only USER can access
-const userPaths = ["/dashboard"]
+const userPaths = ["/dashboard", "/orders"]
 
 function matchesAny(pathname: string, paths: string[]) {
     return paths.some(

@@ -1,17 +1,29 @@
+"use client"
+
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { LayoutDashboard, Package, Tag, ShoppingCart, ShoppingBag } from 'lucide-react';
 
 const DashboardNavBar = () => {
   const pathname = usePathname() || '';
+  const { data: session } = useSession();
+  const role = (session?.user as any)?.role || '';
 
-  const navLinks = [
+  // Admin sees all links; regular users see only Orders
+  const adminLinks = [
     { name: 'Inventory', path: '/inventory', icon: Package },
     { name: 'Products', path: '/Product_frontend', icon: ShoppingBag },
     { name: 'Categories', path: '/categories_frontend', icon: Tag },
-    { name: 'Orders', path: '/', icon: ShoppingCart }, // Update Orders path if it exists
+    { name: 'Orders', path: '/orders', icon: ShoppingCart },
   ];
+
+  const userLinks = [
+    { name: 'Orders', path: '/orders', icon: ShoppingCart },
+  ];
+
+  const navLinks = role === 'ADMIN' ? adminLinks : userLinks;
 
   // Determine if it's admin or user context to show the correct dashboard link
   const isAdmin = pathname.includes('/admin');
@@ -39,7 +51,7 @@ const DashboardNavBar = () => {
               </Link>
               {navLinks.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname.startsWith(item.path) && item.path !== '/';
+                const isActive = pathname.startsWith(item.path);
                 return (
                   <Link
                     key={item.name}
@@ -77,7 +89,7 @@ const DashboardNavBar = () => {
         </Link>
         {navLinks.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname.startsWith(item.path) && item.path !== '/';
+          const isActive = pathname.startsWith(item.path);
           return (
              <Link
                 key={item.name}

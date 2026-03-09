@@ -17,9 +17,9 @@ export default function OrdersPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
       <UserNavBar />
 
-      <main className="flex-1 max-w-4xl w-full mx-auto p-6">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-6 py-8">
 
-        <h2 className="text-2xl font-bold mb-6">Create Order</h2>
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">Create Order</h2>
 
         <OrderForm onOrderCreated={refreshOrders} />
 

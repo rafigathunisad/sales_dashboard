@@ -39,7 +39,7 @@ return <p>Loading orders...</p>
 return (
 
 
-<div className="bg-white p-6 rounded shadow">
+<div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mt-8">
 
   <h3 className="text-lg font-bold mb-4">
     Order History
@@ -55,11 +55,11 @@ return (
 
         <div
           key={order.id}
-          className="border rounded p-3"
+          className="border border-gray-200 rounded-lg overflow-hidden"
         >
 
           <div
-            className="flex justify-between cursor-pointer"
+            className="flex justify-between items-center cursor-pointer p-4 hover:bg-gray-50 transition-colors"
             onClick={() => toggleOrder(order.id)}
           >
 
@@ -83,13 +83,13 @@ return (
 
           {openOrder === order.id && (
 
-            <div className="mt-3 border-t pt-2">
+            <div className="mt-0 border-t border-gray-200 bg-gray-50 p-4">
 
               {order.items.map((item: any, index: number) => (
 
                 <div
                   key={index}
-                  className="flex justify-between text-sm"
+                  className="flex justify-between text-sm py-1"
                 >
 
                   <span>Product #{item.productId}</span>

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
-import { on } from "events"
 
 export default function OrderForm({onOrderCreated}: any) {
 
@@ -131,14 +130,14 @@ export default function OrderForm({onOrderCreated}: any) {
 
   return (
 
-    <div className="bg-white p-6 rounded shadow max-w-xl">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
 
       <h3 className="text-lg font-bold mb-4">Add Product</h3>
 
       <div className="grid grid-cols-4 gap-3 mb-4">
 
         <select
-          className="border p-2 rounded col-span-2"
+          className="border border-gray-300 p-2 rounded-md col-span-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={productId}
           onChange={(e) => handleProductChange(e.target.value)}
         >
@@ -155,14 +154,14 @@ export default function OrderForm({onOrderCreated}: any) {
         <input
           type="number"
           min="1"
-          className="border p-2 rounded"
+          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
         />
 
         <button
           onClick={addToCart}
-          className="bg-green-600 text-white rounded"
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors"
         >
           Add
         </button>
@@ -183,9 +182,9 @@ export default function OrderForm({onOrderCreated}: any) {
         <p className="text-gray-500">No items added</p>
       ) : (
 
-        <table className="w-full mb-4 border">
+        <table className="w-full mb-4 border border-gray-200 rounded-md overflow-hidden">
 
-          <thead className="bg-gray-100">
+          <thead className="bg-gray-50 text-gray-600 text-sm uppercase tracking-wider">
             <tr>
               <th className="p-2 text-left">Product</th>
               <th className="p-2 text-center">Qty</th>
@@ -250,7 +249,7 @@ export default function OrderForm({onOrderCreated}: any) {
 
       <button
         onClick={placeOrder}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition-colors"
       >
         Place Order
       </button>

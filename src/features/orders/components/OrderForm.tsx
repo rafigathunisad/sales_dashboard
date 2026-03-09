@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
+import { on } from "events"
 
-export default function OrderForm({onOrderCreated}:any) {
+export default function OrderForm({onOrderCreated}: any) {
 
   const { data: session } = useSession()
 
   const [products, setProducts] = useState<any[]>([])
   const [productId, setProductId] = useState("")
+  const [selectedPrice, setSelectedPrice] = useState(0)
+
   const [quantity, setQuantity] = useState(1)
   const [cart, setCart] = useState<any[]>([])
   const [message, setMessage] = useState("")
@@ -23,15 +26,43 @@ export default function OrderForm({onOrderCreated}:any) {
     setProducts(data)
   }
 
+  function handleProductChange(id: string) {
+
+    setProductId(id)
+
+    const product = products.find(p => p.id === Number(id))
+    if (product) {
+      setSelectedPrice(product.price)
+    } else {
+      setSelectedPrice(0)
+    }
+  }
+
+
   function addToCart() {
 
-    if (!productId) {
-      alert("Please select a product")
-      return
-    }
+  if (!productId) {
+    alert("Please select a product")
+    return
+  }
 
-    const product = products.find(p => p.id === Number(productId))
-    if (!product) return
+  const product = products.find(p => p.id === Number(productId))
+  if (!product) return
+
+  const existingIndex = cart.findIndex(
+    item => item.productId === product.id
+  )
+
+  if (existingIndex !== -1) {
+
+    const updatedCart = [...cart]
+
+    updatedCart[existingIndex].quantity =
+      updatedCart[existingIndex].quantity + quantity
+
+    setCart(updatedCart)
+
+  } else {
 
     const item = {
       productId: product.id,
@@ -41,14 +72,15 @@ export default function OrderForm({onOrderCreated}:any) {
     }
 
     setCart([...cart, item])
-
-    setProductId("")
-    setQuantity(1)
   }
 
+  setProductId("")
+  setSelectedPrice(0)
+  setQuantity(1)
+}
   function removeItem(index: number) {
-    const updatedCart = cart.filter((_, i) => i !== index)
-    setCart(updatedCart)
+    const updated = cart.filter((_, i) => i !== index)
+    setCart(updated)
   }
 
   async function placeOrder() {
@@ -87,6 +119,7 @@ export default function OrderForm({onOrderCreated}:any) {
 
     setMessage("Order created successfully")
     setCart([])
+
     if (onOrderCreated) {
       onOrderCreated()
     }
@@ -102,18 +135,18 @@ export default function OrderForm({onOrderCreated}:any) {
 
       <h3 className="text-lg font-bold mb-4">Add Product</h3>
 
-      <div className="flex gap-3 mb-4">
+      <div className="grid grid-cols-4 gap-3 mb-4">
 
         <select
-          className="border p-2 rounded flex-1"
+          className="border p-2 rounded col-span-2"
           value={productId}
-          onChange={(e) => setProductId(e.target.value)}
+          onChange={(e) => handleProductChange(e.target.value)}
         >
           <option value="">Select product</option>
 
           {products.map(p => (
             <option key={p.id} value={p.id}>
-              {p.name} - ₹{p.price}
+              {p.name}
             </option>
           ))}
 
@@ -122,19 +155,27 @@ export default function OrderForm({onOrderCreated}:any) {
         <input
           type="number"
           min="1"
-          className="border p-2 rounded w-24"
+          className="border p-2 rounded"
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
         />
 
         <button
           onClick={addToCart}
-          className="bg-green-600 text-white px-4 rounded"
+          className="bg-green-600 text-white rounded"
         >
           Add
         </button>
 
       </div>
+
+      {/* Price Display */}
+
+      {selectedPrice > 0 && (
+        <p className="mb-4 text-sm text-gray-600">
+          Price: ₹{selectedPrice}
+        </p>
+      )}
 
       <h3 className="text-lg font-bold mb-2">Cart</h3>
 
@@ -149,6 +190,7 @@ export default function OrderForm({onOrderCreated}:any) {
               <th className="p-2 text-left">Product</th>
               <th className="p-2 text-center">Qty</th>
               <th className="p-2 text-center">Price</th>
+              <th className="p-2 text-center">Item Total</th>
               <th></th>
             </tr>
           </thead>
@@ -160,16 +202,28 @@ export default function OrderForm({onOrderCreated}:any) {
               <tr key={index} className="border-t">
 
                 <td className="p-2">{item.name}</td>
-                <td className="p-2 text-center">{item.quantity}</td>
-                <td className="p-2 text-center">₹{item.price}</td>
+
+                <td className="p-2 text-center">
+                  {item.quantity}
+                </td>
+
+                <td className="p-2 text-center">
+                  ₹{item.price}
+                </td>
+
+                <td className="p-2 text-center">
+                  ₹{item.price * item.quantity}
+                </td>
 
                 <td className="p-2 text-right">
+
                   <button
                     onClick={() => removeItem(index)}
                     className="text-red-500 text-sm"
                   >
                     Remove
                   </button>
+
                 </td>
 
               </tr>
@@ -183,10 +237,15 @@ export default function OrderForm({onOrderCreated}:any) {
       )}
 
       {cart.length > 0 && (
+
         <div className="flex justify-between mb-4 font-semibold">
+
           <span>Total</span>
+
           <span>₹{total}</span>
+
         </div>
+
       )}
 
       <button

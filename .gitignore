@@ -44,3 +44,7 @@ next-env.d.ts
 
 package.json
 package-lock.json
+
+prisma/dev.db-shm
+prisma/dev.db-wal
+prisma/migrations/20260309210059_dev/

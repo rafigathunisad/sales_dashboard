@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { AdminNavBar } from "@/components/DashboardNavBar"
 
 export default function RestockPage(){
 
@@ -55,41 +56,43 @@ export default function RestockPage(){
 
   return(
 
-    <div className="h-screen bg-[#5f745f] p-8 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
 
-      <div className="w-full max-w-3xl bg-[#e7efe7] shadow-md rounded-xl border border-[#c9d6c9] p-8">
+      <AdminNavBar />
+
+      <main className="flex-1 max-w-3xl w-full mx-auto p-6">
 
         <div className="flex justify-between items-center mb-6">
 
-          <h1 className="text-2xl font-bold text-[#1f2a1f]">
+          <h1 className="text-2xl font-bold">
             Restock Product
           </h1>
 
           <button
             onClick={()=>router.push("/inventory")}
-            className="bg-[#2f3e2f] text-[#e7efe7] px-4 py-2 rounded-md hover:bg-[#1f2a1f]"
+            className="text-sm font-medium text-gray-500 hover:text-gray-900"
           >
-            Back to Inventory
+            &larr; Back to Inventory
           </button>
 
         </div>
 
         {/* Form Panel */}
 
-        <div className="bg-[#d8e4d8] border border-[#c4d3c4] rounded-lg p-6 space-y-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
 
           {/* Category */}
 
           <div className="flex flex-col">
 
-            <label className="text-sm font-semibold text-[#2f3e2f] mb-1">
+            <label className="text-xs font-semibold text-gray-500 uppercase mb-1">
               Select Category
             </label>
 
             <select
               value={categoryId}
               onChange={(e)=>setCategoryId(e.target.value)}
-              className="border border-[#9fb29f] text-[#1f2a1f] rounded-md px-3 py-2 bg-[#e7efe7]"
+              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             >
 
               <option value="">Select Category</option>
@@ -109,14 +112,14 @@ export default function RestockPage(){
 
           <div className="flex flex-col">
 
-            <label className="text-sm font-semibold text-[#2f3e2f] mb-1">
+            <label className="text-xs font-semibold text-gray-500 uppercase mb-1">
               Select Product
             </label>
 
             <select
               value={productId}
               onChange={(e)=>setProductId(e.target.value)}
-              className="border border-[#9fb29f] text-[#1f2a1f] rounded-md px-3 py-2 bg-[#e7efe7]"
+              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             >
 
               <option value="">Select Product</option>
@@ -136,7 +139,7 @@ export default function RestockPage(){
 
           <div className="flex flex-col">
 
-            <label className="text-sm font-semibold text-[#2f3e2f] mb-1">
+            <label className="text-xs font-semibold text-gray-500 uppercase mb-1">
               Quantity
             </label>
 
@@ -144,7 +147,7 @@ export default function RestockPage(){
               type="number"
               value={quantity}
               onChange={(e)=>setQuantity(e.target.value)}
-              className="border border-[#9fb29f] text-[#1f2a1f] rounded-md px-3 py-2 bg-[#e7efe7]"
+              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
 
           </div>
@@ -156,14 +159,14 @@ export default function RestockPage(){
 
             <button
               onClick={handleRestock}
-              className="flex-1 bg-[#2f3e2f] text-[#e7efe7] py-2 rounded-md hover:bg-[#1f2a1f]"
+              className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-medium"
             >
               Submit Restock
             </button>
 
             <button
               onClick={()=>router.push("/inventory")}
-              className="flex-1 border border-[#2f3e2f] text-[#2f3e2f] py-2 rounded-md hover:bg-[#cfe0cf]"
+              className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-md hover:bg-gray-50 transition-colors font-medium"
             >
               Cancel
             </button>
@@ -172,7 +175,7 @@ export default function RestockPage(){
 
         </div>
 
-      </div>
+      </main>
 
     </div>
   )

@@ -12,6 +12,7 @@ import {
   ShoppingBag,
   PackagePlus,
   LogOut,
+  BarChart3,
 } from "lucide-react"
 
 interface NavItem {
@@ -110,6 +111,7 @@ const adminLinks: NavItem[] = [
   { name: "Restock", path: "/inventory/restock", icon: PackagePlus },
   { name: "Products", path: "/Product_frontend", icon: ShoppingBag },
   { name: "Categories", path: "/categories_frontend", icon: Tag },
+  { name: "Reports", path: "/reports", icon: BarChart3 },
 ]
 
 export function AdminNavBar() {

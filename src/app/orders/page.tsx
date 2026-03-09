@@ -1,8 +1,13 @@
 "use client"
-
+import { useState } from "react"
 import OrderForm from "@/features/orders/components/OrderForm"
+import OrderHistory from "@/features/orders/components/OrderHistory"
 
 export default function OrdersPage() {
+  const [refresh, setRefresh] = useState(0)
+  function refreshOrders() {
+    setRefresh(prev => prev + 1)
+  } 
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -15,7 +20,9 @@ export default function OrdersPage() {
 
         <h2 className="text-2xl font-bold mb-6">Create Order</h2>
 
-        <OrderForm />
+        <OrderForm onOrderCreated={refreshOrders} />
+
+        <OrderHistory refresh={refresh} />
 
       </main>
 

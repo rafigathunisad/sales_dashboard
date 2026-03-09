@@ -1,12 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 
-export default function OrderForm() {
+export default function OrderForm({onOrderCreated}:any) {
+
+  const { data: session } = useSession()
 
   const [products, setProducts] = useState<any[]>([])
   const [productId, setProductId] = useState("")
   const [quantity, setQuantity] = useState(1)
+  const [cart, setCart] = useState<any[]>([])
   const [message, setMessage] = useState("")
 
   useEffect(() => {
@@ -14,28 +18,59 @@ export default function OrderForm() {
   }, [])
 
   async function fetchProducts() {
-
     const res = await fetch("/api/products")
     const data = await res.json()
-
     setProducts(data)
+  }
+
+  function addToCart() {
+
+    if (!productId) {
+      alert("Please select a product")
+      return
+    }
+
+    const product = products.find(p => p.id === Number(productId))
+    if (!product) return
+
+    const item = {
+      productId: product.id,
+      name: product.name,
+      quantity: quantity,
+      price: product.price
+    }
+
+    setCart([...cart, item])
+
+    setProductId("")
+    setQuantity(1)
+  }
+
+  function removeItem(index: number) {
+    const updatedCart = cart.filter((_, i) => i !== index)
+    setCart(updatedCart)
   }
 
   async function placeOrder() {
 
-    if (!productId) {
-      setMessage("Please select a product")
+    const userId = (session?.user as any)?.id
+
+    if (!userId) {
+      alert("User not logged in")
+      return
+    }
+
+    if (cart.length === 0) {
+      alert("Cart is empty")
       return
     }
 
     const body = {
-      userId: "ADD_USER_ID_FROM_DB",
-      items: [
-        {
-          productId: Number(productId),
-          quantity: quantity
-        }
-      ]
+      userId: userId,
+      items: cart.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity
+      }))
     }
 
     const res = await fetch("/api/orders", {
@@ -51,61 +86,118 @@ export default function OrderForm() {
     console.log(data)
 
     setMessage("Order created successfully")
-
-    setProductId("")
-    setQuantity(1)
+    setCart([])
+    if (onOrderCreated) {
+      onOrderCreated()
+    }
   }
+
+  const total = cart.reduce((sum, item) => {
+    return sum + item.price * item.quantity
+  }, 0)
 
   return (
 
-    <div className="bg-white p-6 rounded shadow max-w-md">
+    <div className="bg-white p-6 rounded shadow max-w-xl">
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          Select Product
-        </label>
+      <h3 className="text-lg font-bold mb-4">Add Product</h3>
+
+      <div className="flex gap-3 mb-4">
 
         <select
-          className="w-full border border-gray-300 rounded p-2"
+          className="border p-2 rounded flex-1"
           value={productId}
           onChange={(e) => setProductId(e.target.value)}
         >
-          <option value="">Choose product</option>
+          <option value="">Select product</option>
 
-          {products.map((p) => (
+          {products.map(p => (
             <option key={p.id} value={p.id}>
               {p.name} - ₹{p.price}
             </option>
           ))}
 
         </select>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          Quantity
-        </label>
 
         <input
           type="number"
           min="1"
-          className="w-full border border-gray-300 rounded p-2"
+          className="border p-2 rounded w-24"
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
         />
+
+        <button
+          onClick={addToCart}
+          className="bg-green-600 text-white px-4 rounded"
+        >
+          Add
+        </button>
+
       </div>
+
+      <h3 className="text-lg font-bold mb-2">Cart</h3>
+
+      {cart.length === 0 ? (
+        <p className="text-gray-500">No items added</p>
+      ) : (
+
+        <table className="w-full mb-4 border">
+
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-2 text-left">Product</th>
+              <th className="p-2 text-center">Qty</th>
+              <th className="p-2 text-center">Price</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            {cart.map((item, index) => (
+
+              <tr key={index} className="border-t">
+
+                <td className="p-2">{item.name}</td>
+                <td className="p-2 text-center">{item.quantity}</td>
+                <td className="p-2 text-center">₹{item.price}</td>
+
+                <td className="p-2 text-right">
+                  <button
+                    onClick={() => removeItem(index)}
+                    className="text-red-500 text-sm"
+                  >
+                    Remove
+                  </button>
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
+
+      )}
+
+      {cart.length > 0 && (
+        <div className="flex justify-between mb-4 font-semibold">
+          <span>Total</span>
+          <span>₹{total}</span>
+        </div>
+      )}
 
       <button
         onClick={placeOrder}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+        className="bg-blue-600 text-white px-4 py-2 rounded"
       >
         Place Order
       </button>
 
       {message && (
-        <p className="mt-3 text-green-600 text-sm">
-          {message}
-        </p>
+        <p className="mt-3 text-green-600">{message}</p>
       )}
 
     </div>

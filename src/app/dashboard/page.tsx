@@ -1,50 +1,36 @@
 "use client"
 
-import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
+import UserPage from "@/features/dashboard/user_page"
+import DashboardNavBar from "@/components/DashboardNavBar"
 
 export default function UserDashboard() {
     const { data: session, status } = useSession()
 
+    const userId = (session?.user as any)?.id || ""
+
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col font-sans text-gray-900">
-            <header className="bg-white border-b border-gray-200 flex items-center justify-between px-6 py-4">
-                <div className="text-xl font-bold">User Dashboard</div>
-                <div className="flex items-center gap-4">
+        <div className="min-h-screen bg-gray-50/50 flex flex-col font-sans text-gray-900">
+            {/* Navigation Bar */}
+            <DashboardNavBar />
+
+            {/* Top Action Bar */}
+            <div className="w-full bg-white border-b border-gray-100 px-6 lg:px-8 py-3">
+                <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <span className="text-sm text-gray-600 font-medium">
-                        {status === "loading" ? "Loading..." : session?.user?.name || "User"}
+                        {status === "loading" ? "Loading..." : `Welcome, ${session?.user?.name || "User"}`}
                     </span>
                     <button
                         onClick={() => signOut({ callbackUrl: '/' })}
-                        className="text-sm text-blue-600 hover:underline"
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
                     >
                         Sign out
                     </button>
                 </div>
-            </header>
+            </div>
 
-            <main className="flex-1 w-full max-w-6xl mx-auto p-6">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-semibold">Welcome Back</h1>
-                </div>
-
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <p className="text-gray-600 mb-6">
-                        This is your main dashboard workspace.
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="p-4 rounded border border-gray-200 border-dashed bg-gray-50 flex items-center justify-center text-gray-500 min-h-[150px]">
-                            Widget Space
-                        </div>
-                        <div className="p-4 rounded border border-gray-200 border-dashed bg-gray-50 flex items-center justify-center text-gray-500 min-h-[150px]">
-                            Widget Space
-                        </div>
-                        <div className="p-4 rounded border border-gray-200 border-dashed bg-gray-50 flex items-center justify-center text-gray-500 min-h-[150px]">
-                            Widget Space
-                        </div>
-                    </div>
-                </div>
+            <main className="flex-1 w-full">
+                <UserPage userId={userId} />
             </main>
         </div>
     )

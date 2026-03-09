@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 
 export default function InventoryPage() {
 
-  const [products,setProducts] = useState([])
+  const [products,setProducts] = useState<any[]>([])
   const [search,setSearch] = useState("")
   const [categoryFilter,setCategoryFilter] = useState("")
   const [minPrice,setMinPrice] = useState("")

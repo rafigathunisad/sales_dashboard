@@ -3,12 +3,13 @@ import { NextResponse } from "next/server";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const body = await req.json();
+  const { id } = await context.params;
 
   const updated = await prisma.product.update({
-    where: { id: Number(params.id) },
+    where: { id: Number(id) },
     data: body,
   });
 

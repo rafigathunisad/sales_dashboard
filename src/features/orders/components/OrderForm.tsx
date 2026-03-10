@@ -96,31 +96,44 @@ export default function OrderForm({onOrderCreated}: any) {
       return
     }
 
-    const body = {
-      userId: userId,
-      items: cart.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity
-      }))
-    }
+    try {
+      const body = {
+        userId: userId,
+        items: cart.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity
+        }))
+      }
 
-    const res = await fetch("/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    })
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      })
 
-    const data = await res.json()
+      const data = await res.json()
 
-    console.log(data)
+      console.log(data)
 
-    setMessage("Order created successfully")
-    setCart([])
+      if (!res.ok) {
+        setMessage(`Error: ${data.error || "Failed to create order"}`)
+        return
+      }
 
-    if (onOrderCreated) {
-      onOrderCreated()
+      setMessage("Order created successfully")
+      setCart([])
+
+      if (onOrderCreated) {
+        onOrderCreated()
+      }
+
+      // Clear message after 3 seconds
+      setTimeout(() => setMessage(""), 3000)
+    } catch (error: any) {
+      setMessage(`Error: ${error.message}`)
+      console.error("Order placement error:", error)
     }
   }
 
@@ -255,7 +268,7 @@ export default function OrderForm({onOrderCreated}: any) {
       </button>
 
       {message && (
-        <p className="mt-3 text-green-600">{message}</p>
+        <p className={`mt-3 font-medium ${message.includes("Error") ? "text-red-600" : "text-green-600"}`}>{message}</p>
       )}
 
     </div>

@@ -56,7 +56,14 @@ export async function middleware(req: NextRequest) {
             return res
         }
 
-        // only admin can write (POST/PUT/DELETE)
+        // users can POST to /api/orders (place orders)
+        if (pathname === "/api/orders" && req.method === "POST") {
+            const res = NextResponse.next()
+            res.headers.set("Cache-Control", "no-store")
+            return res
+        }
+
+        // only admin can write (POST/PUT/DELETE) to other routes
         if (role !== "ADMIN") {
             return NextResponse.json(
                 { error: "Forbidden" },

@@ -1,0 +1,30 @@
+services:
+ 
+  db:
+    image: postgres:15
+    container_name: sales_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "040903"
+      POSTGRES_DB: sales_dashboard
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+ 
+  app:
+    build: .
+    container_name: sales_dashboard_app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    command: sh -c "sleep 10 && npx prisma db push && npx prisma db seed && npm start"
+ 
+volumes:
+  postgres_data:
+ 

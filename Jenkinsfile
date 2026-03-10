@@ -5,7 +5,7 @@ pipeline {
 
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/rafigathunisad/sales_dashboard.git'
+                git branch: 'main', url: 'https://github.com/rafigathunisad/sales_dashboard.git'
             }
         }
 

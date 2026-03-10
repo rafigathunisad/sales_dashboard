@@ -18,7 +18,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 sh '''
-                docker login -u raksha01 -p YOUR_DOCKER_PASSWORD
+                docker login -u raksha01 -p Rakshitha@123
                 docker push raksha01/sales_dashboard:latest
                 '''
             }

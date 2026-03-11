@@ -101,12 +101,7 @@ export default function CategoriesPage() {
                   <td className="p-3 text-sm">{cat.id}</td>
                   <td className="p-3 text-sm font-medium">{cat.name}</td>
                   <td className="p-3 flex gap-2">
-                    <button
-                      onClick={() => handleEdit(cat)}
-                      className="text-amber-600 hover:text-amber-800 text-sm font-medium"
-                    >
-                      Edit
-                    </button>
+
 
                     <button
                       onClick={() => handleDelete(cat.id)}
